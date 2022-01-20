@@ -33,7 +33,7 @@ final Function onTab;
   @override
   Widget build(BuildContext context) {
     return  Container(
-      padding: EdgeInsets.fromLTRB(12, 0, 12, 0),//for making a space between the buttons
+      padding: EdgeInsets.fromLTRB(12, 0, 12, 10),//for making a space between the buttons
       child: Column(
            children: [
       
