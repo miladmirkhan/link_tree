@@ -78,12 +78,13 @@ class mainScreen extends StatelessWidget {
                child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                  children: [
+                   
                       EPButton(label: Icons.phone,color: Colors.pinkAccent, onTab:(){_makePhoneCall(userList[0].phone);} ),
                       EPButton(label: Icons.mail_outline,color: Colors.greenAccent, onTab:(){mailMe(userList[0].email);} ),
                       EPButton(label: Icons.sms,color: Colors.amberAccent, onTab:(){_sendSms(userList[0].phone);} ),
                       EPButton(label: Icons.phone_in_talk_sharp,color: Colors.blueAccent, onTab:(){_launchURLWhatsapp(userList[0].phone);} ),
                    
-                 ],
+                          ],
                  
                ),
              ) 
