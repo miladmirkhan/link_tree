@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:link_tree/cardSection.dart';
+import 'package:link_tree/mainScreen/cardSection.dart';
 import 'package:link_tree/config.dart';
+import 'package:link_tree/service/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-final userList=User.generateUsers();
+
 class mainScreen extends StatelessWidget {
-  
   @override
   Widget build(BuildContext context) {
-    
+     AuthService _authProvider = Provider.of<AuthService>(context);
     return Scaffold(
+      appBar: AppBar(title: Text('Main Screen'), actions: [
+          IconButton(
+              onPressed: () {
+                Provider.of<AuthService>(context, listen: false).logOut();
+              },
+              icon: Icon(Icons.logout)),
+        ]),
       backgroundColor: Colors.grey,//background color
-      body: Center(
-    child: Container(
+      body: _authProvider.generalUser == null
+            ? Container(child: Text('You are not authorisef')): Container(
       margin: new EdgeInsets.all( 20.0),// making the page ceprate from corners
       child: SingleChildScrollView(// making it scrollable
         child: Column(
@@ -22,7 +30,7 @@ class mainScreen extends StatelessWidget {
           children: [
           ClipRRect(//the picture
            borderRadius: BorderRadius.circular(8.0),//for rounder corners
-           child: Image.network('${userList[0].imageURL.toString()}',
+           child: Image.network('${ _authProvider.generalUser!.imageURL}',
               width: 160.0,
               height: 160.0,
               fit: BoxFit.fill,
@@ -45,13 +53,13 @@ class mainScreen extends StatelessWidget {
 
       Divider(color: Colors.transparent,),//make a space with divider
       
-           Text(userList[0].name,// name
+           Text( _authProvider.generalUser!.name!,// name
            style: TextStyle(fontSize: 25.0,fontWeight:FontWeight.bold,color: Colors.purple),), 
       
-           Text(userList[0].title,//title
+           Text( _authProvider.generalUser!.title!,//title
            style: TextStyle(fontSize: 20.0,fontWeight:FontWeight.bold,color: Colors.amber),),
       
-           Text(userList[0].location,//location
+           Text(_authProvider.generalUser!.location!,//location
            style: TextStyle(fontSize: 20.0,fontWeight:FontWeight.bold,color: Colors.purpleAccent),),  
                  
                    Padding(//for making the line
@@ -61,15 +69,16 @@ class mainScreen extends StatelessWidget {
                    color:Colors.black,
                     ) ),
                  
-               Text(userList[0].bio,//bio text
+               Text(_authProvider.generalUser!.bio!,//bio text
                style:TextStyle(fontSize: 15.0,fontWeight:FontWeight.w400,color: Colors.black54),
                 textAlign:TextAlign.center ,),
       
       
-                     EButton(label: "Facebook",color: Colors.pinkAccent, onTab:(){launchInBrowser(userList[0].facebook);} ),
-                     EButton(label: "GitHub",color: Colors.greenAccent, onTab:(){launchInBrowser(userList[0].github);} ),
-                     EButton(label: "instagram",color: Colors.amberAccent, onTab:(){launchInBrowser(userList[0].instagram);} ),
-                     EButton(label: "StackOverFlow",color: Colors.blueAccent, onTab:(){launchInBrowser(userList[0].stackOverFlow);} ),
+                     EButton(label: "Facebook",color: Colors.pinkAccent, onTab:(){launchInBrowser(_authProvider.generalUser!.facebook!);} ),
+                     EButton(label: "GitHub",color: Colors.greenAccent, onTab:(){launchInBrowser(_authProvider.generalUser!.github!);} ),
+                     EButton(label: "Instagram",color: Colors.amberAccent, onTab:(){launchInBrowser(_authProvider.generalUser!.instagram!);} ),
+                     EButton(label: "LinkedIn",color: Colors.amberAccent, onTab:(){launchInBrowser(_authProvider.generalUser!.linkedIn!);} ),
+                     EButton(label: "StackOverFlow",color: Colors.limeAccent, onTab:(){launchInBrowser(_authProvider.generalUser!.stackOverFlow!);} ),
            
              Divider(color: Colors.transparent,),
 
@@ -79,10 +88,10 @@ class mainScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                    
-                      EPButton(label: Icons.phone,color: Colors.pinkAccent, onTab:(){_makePhoneCall(userList[0].phone);} ),
-                      EPButton(label: Icons.mail_outline,color: Colors.greenAccent, onTab:(){mailMe(userList[0].email);} ),
-                      EPButton(label: Icons.sms,color: Colors.amberAccent, onTab:(){_sendSms(userList[0].phone);} ),
-                      EPButton(label: Icons.phone_in_talk_sharp,color: Colors.blueAccent, onTab:(){_launchURLWhatsapp(userList[0].phone);} ),
+                      EPButton(label: Icons.phone,color: Colors.pinkAccent, onTab:(){_makePhoneCall(_authProvider.generalUser!.phone!);} ),
+                      EPButton(label: Icons.mail_outline,color: Colors.greenAccent, onTab:(){mailMe(_authProvider.generalUser!.email!);} ),
+                      EPButton(label: Icons.sms,color: Colors.amberAccent, onTab:(){_sendSms(_authProvider.generalUser!.phone!);} ),
+                      EPButton(label: Icons.phone_in_talk_sharp,color: Colors.blueAccent, onTab:(){_launchURLWhatsapp(_authProvider.generalUser!.phone!);} ),
                    
                           ],
                  
@@ -93,8 +102,7 @@ class mainScreen extends StatelessWidget {
         ),
       ),
     ),
-      ),
-    );
+      );
   }
 }
 
@@ -113,20 +121,21 @@ Future<void> launchInBrowser(String url) async {// to open the brawser
   }
 
   Future<void> mailMe(String url) async {// to send an email
-  dynamic url='mailto:${userList[0].email}';
-   if(await canLaunch(url)){
-    await launch(url);
+  
+  dynamic aurl='mailto:$url';
+   if(await canLaunch(aurl)){
+    await launch(aurl);
    }else{
      throw 'could not send email to $url' ;
    }  
   }
 
 Future<void> _makePhoneCall(String phoneNumber) async {// to make a call in phone
-    dynamic phone='tel:${userList[0].phone}';   
+    dynamic phone='tel:$phoneNumber';   
     await launch(phone);
   }
 
   Future<void> _sendSms(String phoneNumber) async {// send an sms
-    dynamic phone='sms:${userList[0].phone}';  
+    dynamic phone='sms:$phoneNumber';  
     await launch(phone);
   }
