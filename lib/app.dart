@@ -20,6 +20,8 @@ Widget build(BuildContext context) {
         '/homeScreen':(context)=>HomeScreenView(),
         '/createProfile':(context)=>LoginScreen(),
         '/rejesteration':(context)=>CreateProfileScreen(),
+        '/signUp':(context)=>RegisterScreen(),
+        
         },
     );
   }

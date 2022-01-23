@@ -178,15 +178,6 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                               decoration:
                                   generalInputDecoration(labelText: 'Email'),
                             ),
-
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            TextFormField(
-                              controller: _linkedInController,
-                              decoration: generalInputDecoration(
-                                  labelText: 'Link In'),
-                            ),
                             
                             const SizedBox(
                               height: 15,
@@ -224,7 +215,7 @@ class _CreateProfileScreenState extends State<CreateProfileScreen> {
                                       if (_isValidated == true &&
                                           _authProvider.theUser != null) {
                                         await uploadTheSelectedFile(
-                                            _authProvider.theUser!.uid);
+                                            _authProvider.generalUser!.id!);
                                         //make our job easier
                                         GeneralUser _generalUser = GeneralUser(
                                           id:_authProvider.generalUser!.id,

@@ -19,6 +19,15 @@ class HomeScreenView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           
           children: [
+            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.amber,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pushNamed('/signUp');
+                              },
+                              child: Text('sign Up')),
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
